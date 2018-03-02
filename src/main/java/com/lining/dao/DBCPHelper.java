@@ -4,8 +4,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 /**
@@ -57,6 +56,105 @@ public class DBCPHelper {
             }
         }
         return conn;
+    }
+
+    public static ResultSet select(String sql) throws Exception {
+        Connection conn = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+            conn = getConnection();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+            return rs;
+        } catch (SQLException sqle) {
+            throw new SQLException("select data exception: "
+                    + sqle.getMessage());
+        } catch (Exception e) {
+            throw new Exception("System e exception: " + e.getMessage());
+        }
+
+    }
+
+    public void insert(String sql) throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (SQLException sqle) {
+            throw new Exception("insert data exception: " + sqle.getMessage());
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+                throw new Exception("ps close exception: " + e.getMessage());
+            }
+        }
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            throw new Exception("connection close exception: " + e.getMessage());
+        }
+    }
+
+    public void update(String sql) throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (SQLException sqle) {
+            throw new Exception("update exception: " + sqle.getMessage());
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+                throw new Exception("ps close exception: " + e.getMessage());
+            }
+        }
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            throw new Exception("connection close exception: " + e.getMessage());
+        }
+    }
+
+    public void delete(String sql) throws Exception {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        try {
+            conn = getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.executeUpdate();
+        } catch (SQLException sqle) {
+            throw new Exception("delete data exception: " + sqle.getMessage());
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (Exception e) {
+                throw new Exception("ps close exception: " + e.getMessage());
+            }
+        }
+        try {
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (Exception e) {
+            throw new Exception("connection close exception: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
